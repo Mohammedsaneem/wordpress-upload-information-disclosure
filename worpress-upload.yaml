@@ -1,1 +1,29 @@
+id: wordpress-upload
+
+info:
+  name: WordPress Upload Fuzzing
+  author: Mohammed Saneem
+  severity: info
+  description: Allows attacker to view sensitive information such as company invoices
+  reference: |
+      - https://twitter.com/sec_hawk/status/1426984595094913025?s=21
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-json/wp-content/uploads/"
+      - "{{BaseURL}}/wp-content/uploads/pdf-invoices/"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "text/html"
+          - "application/xhtml+xml"
+          - "application/xml"
+
+      - type: status
+        status:
+          - 200
 
